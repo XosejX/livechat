@@ -30,9 +30,11 @@ nav{
 li{
     list-style-type: none;
     background-color: #C8F5A4;
-    position: relative;
     margin-top: 5px;
     padding-left: 20px;
+    margin-right: 20px;
+    margin-left: 50%;
+    border-radius: 5px;
 }
 
 .row{

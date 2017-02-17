@@ -7,7 +7,12 @@ function escapeHtml(text) {
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
 }
-        
+
+$(function(){
+    $("input").focus();
+});
+
+
 var socket = io();
 $('form').submit(function(){
     socket.emit('chat message', $('#text').val());
