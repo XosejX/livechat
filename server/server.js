@@ -4,6 +4,8 @@ var app = express();
 var http = require("http").Server(app);
 var io = require("socket.io")(http);
 
+var port = normalizePort(process.env.PORT || "3000");
+app.set("port", port);
 
 app.use(express.static('public'));
 app.get("/", function(peticion, respuesta){
