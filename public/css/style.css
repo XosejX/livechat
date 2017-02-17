@@ -30,11 +30,14 @@ nav{
 li{
     list-style-type: none;
     background-color: #C8F5A4;
-    margin-top: 5px;
     padding-left: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 5px;
     margin-right: 20px;
     margin-left: 50%;
-    border-radius: 5px;
+    border-radius: 5px 5px 0px 5px;
+    box-shadow: 1px 1px 3px;
 }
 
 .row{
