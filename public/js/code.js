@@ -17,5 +17,5 @@ $('form').submit(function(){
 
 socket.on('chat message', function(msg){
     msg = escapeHtml(msg);
-    $('#line').append($('<li>> ' + msg + '</li>'));
+    $('#line').append($('<li> ' + msg + '</li>'));
 });

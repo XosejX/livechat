@@ -15,15 +15,28 @@
     
     <header>
         <h1>CHAT</h1>
-    </header><hr/>
+    </header>
     
-    <ul id="line"></ul>
+    <div class="row">
     
-    <div class="main">
-        <form action="">
-            <input type="text" id="text" autocomplete="off" placeholder="Write ..." />
-            <button>Send</button>
-        </form>
+        <nav>
+            <p>Salas</p>
+            <hr/>
+        </nav>
+
+        <div class="main">
+            <ul id="line"></ul>
+        </div>
+        
+        <div class="msg">
+
+            <form action="">
+                <input type="text" id="text" autocomplete="off" placeholder="Write a message here" />
+                <button>Send</button>
+            </form>
+
+        </div>
+        
     </div>
     
     <script src="/socket.io/socket.io.js"></script>
