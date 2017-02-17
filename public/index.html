@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    
 </head>
     
 <body>
@@ -28,19 +27,7 @@
     </div>
     
     <script src="/socket.io/socket.io.js"></script>
-    <script>
-        var socket = io();
-        $('form').submit(function(){
-            socket.emit('chat message', $('#text').val());
-            $('#text').val('');
-            return false;
-        });
-        socket.on('chat message', function(msg){
-            $('#line').append($('<li>> ' + msg + '</li>'));
-            console.log("works");
-        });
-    </script>
-    
+    <script type="text/javascript" src="./js/code.js"></script>
 </body>
     
 </html>
