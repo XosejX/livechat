@@ -14,35 +14,65 @@ header{
     background-color: #eee;
     color: grey;
     text-align: center;
-    float: left;
 }
 header > h1{
     margin: 0;
-    padding-right: 0;
 }
 
 nav{
     width: 25%;
     height: 100%;
     float: left;
+    overflow-y: scroll;
 }
 
 li{
     list-style-type: none;
-    background-color: #C8F5A4;
     padding-left: 20px;
     padding-top: 5px;
     padding-bottom: 5px;
     margin-top: 5px;
     margin-right: 20px;
-    margin-left: 50%;
-    border-radius: 5px 5px 0px 5px;
     box-shadow: 1px 1px 3px;
+}
+li .glyphicon{
+    display: inline;
+}
+ul .send{
+    background-color: #C8F5A4;
+    border-radius: 5px 5px 0px 5px;
+    margin-left: 50%;
+}
+ul .get{
+    background-color: ghostwhite;
+    border-radius: 5px 5px 5px 0px;
+    margin-right: 50%;
+}
+ul .new{
+    width: 100%;
+    background-color: skyblue;
+}
+
+li > p{
+    color: darkgrey;
+    float: right;
+    padding-right: 10px;
+}
+
+input{
+    padding-left: 20px;
+}
+
+.ava{
+    width: 30px;
+    padding-right: 10px;
 }
 
 .row{
     width: 100%;
     height: 85%;
+    float: left;
+    padding-left: 20px;
 }
 
 .main{
@@ -52,7 +82,7 @@ li{
     background-repeat: no-repeat;
     background-size: 100% 100%;
     float: left;
-    overflow: auto;
+    overflow-y: scroll;
 }
 
 .msg{
@@ -85,4 +115,8 @@ li{
 
 ::-webkit-input-placeholder {
     font-weight: 900;
+}
+
+.modal-body img{
+    width: 100px;
 }
