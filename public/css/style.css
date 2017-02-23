@@ -63,6 +63,10 @@ input{
     padding-left: 20px;
 }
 
+.errorUser{
+    color: red;
+}
+
 .ava{
     width: 30px;
     padding-right: 10px;

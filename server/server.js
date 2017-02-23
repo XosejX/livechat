@@ -5,6 +5,8 @@ var io = require("socket.io")(http);
 //var dl = require("delivery");
 //var fs = require("fs");
 
+var userList = [];
+
 /* HEROKU */
 function normalizePort(val) {
     var port = parseInt(val, 10);
@@ -28,24 +30,43 @@ app.get("/", function(peticion, respuesta){
     respuesta.sendFile('index.html');    
 });
 
-var userList = [];
+
 io.on("connection", function(socket){
-    userList.push(socket);
-    socket.on("addUser", function(user){
-        socket.nick = user;
-        io.emit("addUser", user);
+    socket.on("addUser", function(user, state, img, callback){
+        /* Check if the user exists */
+        if (userList.indexOf(user) != -1){
+            callback(false);
+        }
+        else{
+            callback(true);
+            socket.nick = user;
+            userList.push({nick: user, state: state, img: img});
+            updateUsers();
+        }
     });
-    socket.on("chat message", function(msg, cls){
+    
+    function updateUsers(){
+        io.emit("addUserChat", userList);
+    }
+    
+    socket.on("chat message", function(msg){
         console.log("Conexion: message --> " + msg);
-        io.emit('chat message', msg, cls);
+        console.log(socket.nick);
+        io.emit('chat message', msg, socket.nick);
     });
+    
     socket.on("disconnect", function(){
-        io.emit("delUser");
+        io.emit("delUser", socket.nick);
         
-        var i = userList.indexOf(socket);
-        userList.splice(i, 1);
+        if (!socket.nick) return;
         
-        console.log("user online: " + userList.length);
+        for (var i=0; i<userList.length; i++){
+            if (socket.nick == userList[i].nick){
+                userList.splice(i, 1);
+            }
+        }
+        
+        updateUsers();
     });
     
     socket.on("showUser", function(text, state, img){
