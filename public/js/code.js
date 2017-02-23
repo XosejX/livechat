@@ -45,11 +45,11 @@ $('#chat').submit(function(){
 });
 
 socket.on("delUser", function(){
-    $('#line').append($('<li class="new">Usuario <font color="red">desconectado</font></li>'));
+    $('#line').append($('<li class="new">User <font color="red">disconnected</font></li>'));
 });
 
 socket.on("addUser", function(user){
-    $('#line').append($('<li class="new">Usuario [' + user + '] <font color="green">conectado</font></li>'));
+    $('#line').append($('<li class="new">User [' + user + '] <font color="green">connected</font></li>'));
 });
 
 socket.on('chat message', function(msg, cls){
