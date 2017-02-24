@@ -57,7 +57,7 @@ socket.on("addUserChat", function(users){
         var video = ('<p><span class="glyphicon glyphicon-facetime-video"></span></p>');
         var private = ('<p><span class="glyphicon glyphicon-lock"></span></p> ');
         var div = ('<hr/><div>State: ' + users[i].state + '</div>');
-        $("#user").append($("<li><img class='ava' src='" + users[i].img + "'/>" + users[i].nick + video + private + div + "</li>"));
+        $("#user").append($("<li><img class='ava' src='" + users[i].img + "'/>" + users[i].nick + video + private + div + "<div class='secret' id='" + users[i].id + "'></div></li>"));
     }
 });
 
@@ -80,3 +80,35 @@ socket.on("delUser", function(nick){
 socket.on("showUser", function(nick){
     $('#line').append($('<li class="new">User <b>' + nick + ' </b><font color="green">connected</font></li>'));
 });
+
+
+/* Start event INTERVAL when USER TYPE */
+function interval (){
+    /* Create the interval while a user write */
+    inter = setInterval(function(){
+        socket.emit("typeOut");
+        clearInterval(inter);
+        inter = false;
+    }, 600);
+}
+
+var inter = false;
+$("#text").keyup(function(){
+    if (!inter){
+        socket.emit("typeIn");
+        interval();
+    }
+    else{
+        clearInterval(inter);
+        interval();
+    }
+});
+
+socket.on("type", function(id){
+        $("#"+id).text("Writing...");
+});
+
+socket.on("typeOff", function(id){
+        $("#"+id).text("");
+});
+/* Finish event INTERVAL */

@@ -64,6 +64,10 @@ li > p{
     padding-right: 10px;
 }
 
+.secret{
+    color: lightgreen;
+}
+
 input{
     padding-left: 20px;
 }

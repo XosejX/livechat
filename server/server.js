@@ -45,7 +45,7 @@ io.on("connection", function(socket){
         else{
             callback(true);
             socket.nick = user;
-            userList.push({nick: user, state: state, img: img});
+            userList.push({nick: user, state: state, img: img, id: socket.id});
             socket.broadcast.emit("showUser", socket.nick);
             updateUsers();
         }
@@ -75,6 +75,14 @@ io.on("connection", function(socket){
     
     socket.on("showUser", function(text){
         io.emit('showUser', text);
+    });
+    
+    socket.on("typeIn", function(){
+        io.emit("type", socket.id);
+    });
+    
+    socket.on("typeOut", function(){
+        io.emit("typeOff", socket.id);
     });
 });
 
