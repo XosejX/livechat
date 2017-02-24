@@ -40,8 +40,13 @@ li .glyphicon{
 }
 ul .send{
     background-color: #C8F5A4;
-    border-radius: 5px 5px 0px 5px;
+    border-radius: 20px 20px 0px 20px;
     margin-left: 50%;
+}
+ul .other{
+    background-color: aliceblue;
+    border-radius: 0px 20px 20px 20px;
+    width: 50%;
 }
 ul .get{
     background-color: ghostwhite;

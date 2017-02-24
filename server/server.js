@@ -6,8 +6,9 @@ var io = require("socket.io")(http);
 //var fs = require("fs");
 
 var userList = [];
+var lista = [];
 
-/* HEROKU */
+/* Set the port for HEROKU */
 function normalizePort(val) {
     var port = parseInt(val, 10);
 
@@ -19,7 +20,7 @@ function normalizePort(val) {
     if (port >= 0) {
         return port;
     }
-
+    
     return false;
 }
 var port = normalizePort(process.env.PORT || "3000");
@@ -33,14 +34,19 @@ app.get("/", function(peticion, respuesta){
 
 io.on("connection", function(socket){
     socket.on("addUser", function(user, state, img, callback){
+        /* Create array of usernick for use indexOf */
+        for (var i=0; i<userList.length; i++){
+            lista.push(userList[i].nick);
+        }
         /* Check if the user exists */
-        if (userList.indexOf(user) != -1){
+        if (lista.indexOf(user) != -1){
             callback(false);
         }
         else{
             callback(true);
             socket.nick = user;
             userList.push({nick: user, state: state, img: img});
+            socket.broadcast.emit("showUser", socket.nick);
             updateUsers();
         }
     });
@@ -50,9 +56,7 @@ io.on("connection", function(socket){
     }
     
     socket.on("chat message", function(msg){
-        console.log("Conexion: message --> " + msg);
-        console.log(socket.nick);
-        io.emit('chat message', msg, socket.nick);
+        io.emit('chat message', msg, socket.nick, socket.id);
     });
     
     socket.on("disconnect", function(){
@@ -69,8 +73,8 @@ io.on("connection", function(socket){
         updateUsers();
     });
     
-    socket.on("showUser", function(text, state, img){
-        io.emit('showUser', text, state, img);
+    socket.on("showUser", function(text){
+        io.emit('showUser', text);
     });
 });
 

@@ -1,4 +1,5 @@
 function escapeHtml(text) {
+    /* Replaces special characters of HTML for the code of character */
     text += " ";
     text = text
         .replace(/&/g, "&amp;")
@@ -7,6 +8,7 @@ function escapeHtml(text) {
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
     
+    /* Check if the message is empty. */
     if (text.length > 0){
         var result = text.match(/\s/g);
         if (text.length > result.length){
@@ -28,7 +30,6 @@ function selectNick(){
         socket.emit("addUser", val, state, img, function(callback){
             if (callback){
                 $("#myModal").modal('hide');
-                socket.emit('showUser', val, state, img);
             }
             else{
                 $(".errorUser").html("Sorry, that user is taken, try other user");
@@ -38,9 +39,7 @@ function selectNick(){
 }
 
 $(function(){
-	$(document).ready(function(){
-		$("#myModal").modal('show');
-	});
+    $("#myModal").modal('show');
     $("input").focus();
 });
 
@@ -52,14 +51,9 @@ $('#chat').submit(function(){
     return false;
 });
 
-socket.on("delUser", function(nick){
-    $('#line').append($('<li class="new">User <b>' + nick + '</b><font color="red">disconnected</font></li>'));
-});
-
 socket.on("addUserChat", function(users){
     $('#user').empty();
     for (var i=0; i < users.length; i++){
-        //$('#line').append($('<li class="new">User [' + users[i] + '] <font color="green">connected</font></li>'));
         var video = ('<p><span class="glyphicon glyphicon-facetime-video"></span></p>');
         var private = ('<p><span class="glyphicon glyphicon-lock"></span></p> ');
         var div = ('<hr/><div>State: ' + users[i].state + '</div>');
@@ -67,20 +61,22 @@ socket.on("addUserChat", function(users){
     }
 });
 
-socket.on('chat message', function(msg, nick){
+socket.on('chat message', function(msg, nick, id){
     msg = escapeHtml(msg);
-    if (msg){
+    if (msg && socket.id == id){
         $('#line').append($('<li class="send"><b>' + nick + "</b>: " + msg + '</li>'));
-        console.log(nick);
+    }
+    if (msg && socket.id != id){
+        $('#line').append($('<li class="other"><b>' + nick + "</b>: " + msg + '</li>'));
     }
 });
-// PRUEBAS PRUEBAS PRUEBAS
-socket.on("showUser", function(text, state, img){
-    text = escapeHtml(text);
-    if (text){
-        var video = ('<p><span class="glyphicon glyphicon-facetime-video"></span></p>');
-        var private = ('<p><span class="glyphicon glyphicon-lock"></span></p> ');
-        var div = ('<hr/><div>State: ' + state + '</div>');
-        //$("#user").append($("<li><img class='ava' src='" + img + "'/>" + text + video + private + div + "</li>"));
-    }
+
+socket.on("delUser", function(nick){
+    if (!nick){return;} //For when reload the page without login.
+    
+    $('#line').append($('<li class="new">User <b>' + nick + '</b><font color="red">disconnected</font></li>'));
+});
+
+socket.on("showUser", function(nick){
+    $('#line').append($('<li class="new">User <b>' + nick + ' </b><font color="green">connected</font></li>'));
 });
