@@ -33,6 +33,10 @@ app.get("/", function(peticion, respuesta){
 
 
 io.on("connection", function(socket){
+    var room = "defaultRoom";
+    
+    socket.join(room);
+    
     socket.on("addUser", function(user, state, img, callback){
         /* Create array of usernick for use indexOf */
         for (var i=0; i<userList.length; i++){
@@ -56,7 +60,15 @@ io.on("connection", function(socket){
     }
     
     socket.on("chat message", function(msg){
-        io.emit('chat message', msg, socket.nick, socket.id);
+        //io.emit('chat message', msg, socket.nick, socket.id);
+        io.sockets.in(room).emit('chat message', msg, socket.nick, socket.id);
+    });
+    
+    socket.on("change room", function(newRoom){
+        socket.leave(room);
+        socket.join(newRoom);
+        room = newRoom;
+        socket.emit("changeRoom", newRoom);
     });
     
     socket.on("disconnect", function(){

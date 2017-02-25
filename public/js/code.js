@@ -41,6 +41,9 @@ function selectNick(){
 $(function(){
     $("#myModal").modal('show');
     $("input").focus();
+    $("#room").change(function(){
+        socket.emit("change room", $("#room").val());
+    });
 });
 
 
@@ -69,6 +72,10 @@ socket.on('chat message', function(msg, nick, id){
     if (msg && socket.id != id){
         $('#line').append($('<li class="other"><b>' + nick + "</b>: " + msg + '</li>'));
     }
+});
+
+socket.on("changeRoom", function(room){
+    $("#line").html("").append($('<li class="new">Welcome to <b>' + room + '</b>!</li>'));
 });
 
 socket.on("delUser", function(nick){
