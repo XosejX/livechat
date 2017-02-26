@@ -25,6 +25,12 @@
         
         <div class="main">
             <ul id="line"></ul>
+            
+            <div style="display: none;" id="cam">
+                <canvas style="display:none;" id="preview"></canvas>
+                <video src="" id="video" autoplay="true"></video>
+                <img id="play"/>
+            </div>
         </div>
         
         <div class="msg">
@@ -37,6 +43,11 @@
                 </select>
                 <input type="text" id="text" autocomplete="off" placeholder="Write a message here" />
                 <button>Send</button>
+                
+<!--                <input type="file" id="imagefile" accept="image/*">-->
+                
+                <input type="file" id="selectedFile" accept="image/*" style="display: none;" />
+                <button onclick="document.getElementById('selectedFile').click();">Img</button>
             </form>
         </div>
     </div>
@@ -72,7 +83,10 @@
     
     
     <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="./js/video.js"></script>
     <script type="text/javascript" src="./js/code.js"></script>
+    <script type="text/javascript" src="./js/file.js"></script>
+    
 </body>
     
 </html>

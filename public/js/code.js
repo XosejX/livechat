@@ -17,6 +17,12 @@ function escapeHtml(text) {
     }else{return false;}
 }
 
+function updateScroll(){
+    /* When overflow exists, autoscroll to bottom */
+    var element = $(".main");
+    element.scrollTop(element.prop('scrollHeight'));
+}
+
 function selectNick(){
     var val = $("#nick").val();
     var state = $("#st").val();
@@ -25,7 +31,7 @@ function selectNick(){
     val = escapeHtml(val);
     state = escapeHtml(state);
     
-    if (val.length > 0 && state.length > 0 && img.length > 0){
+    if (val.length > 0 && state.length > 0){
         /* Check if the user exists */
         socket.emit("addUser", val, state, img, function(callback){
             if (callback){
@@ -36,6 +42,17 @@ function selectNick(){
             }
         });
     }
+}
+
+function videoUp(){
+    $(".glyphicon-facetime-video").click(function(){
+        var display = $("#cam").css("display");
+        if (display == "none"){
+            $("#cam").css("display", "inline");
+        }else{
+            $("#cam").css("display", "none");
+        }
+    });
 }
 
 $(function(){
@@ -62,6 +79,8 @@ socket.on("addUserChat", function(users){
         var div = ('<hr/><div>State: ' + users[i].state + '</div>');
         $("#user").append($("<li><img class='ava' src='" + users[i].img + "'/>" + users[i].nick + video + private + div + "<div class='secret' id='" + users[i].id + "'></div></li>"));
     }
+    
+    videoUp();
 });
 
 socket.on('chat message', function(msg, nick, id){
@@ -72,9 +91,15 @@ socket.on('chat message', function(msg, nick, id){
     if (msg && socket.id != id){
         $('#line').append($('<li class="other"><b>' + nick + "</b>: " + msg + '</li>'));
     }
+    updateScroll();
 });
 
 socket.on("changeRoom", function(room){
+    if ($("#videoS")){
+        $("#videoS").remove();
+    }
+    
+    $("#cam").css("display", "none");
     $("#line").html("").append($('<li class="new">Welcome to <b>' + room + '</b>!</li>'));
 });
 
@@ -119,3 +144,20 @@ socket.on("typeOff", function(id){
         $("#"+id).text("");
 });
 /* Finish event INTERVAL */
+
+/* Stream cam */
+socket.on("stream", function(image){
+    $("#play").attr("src", image);
+});
+
+/* Send images */
+socket.on('sendImage', function (nick, base64Image, id) {
+    /* Check if is the sender or not for set the class */
+    if (socket.id == id){
+        $('#line').append($('<li class="send"><b>' + nick + '</b>: <img id="fil" src="' + base64Image + '"/></li>'));
+    }
+    if (socket.id != id){
+        $('#line').append($('<li class="other"><b>' + nick + '</b>: <img id="fil" src="' + base64Image + '"/></li>'));
+    }
+    updateScroll();
+});

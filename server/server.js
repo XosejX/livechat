@@ -2,8 +2,6 @@ var express = require ("express");
 var app = express();
 var http = require("http").Server(app);
 var io = require("socket.io")(http);
-//var dl = require("delivery");
-//var fs = require("fs");
 
 var userList = [];
 var lista = [];
@@ -60,7 +58,6 @@ io.on("connection", function(socket){
     }
     
     socket.on("chat message", function(msg){
-        //io.emit('chat message', msg, socket.nick, socket.id);
         io.sockets.in(room).emit('chat message', msg, socket.nick, socket.id);
     });
     
@@ -95,6 +92,17 @@ io.on("connection", function(socket){
     
     socket.on("typeOut", function(){
         io.emit("typeOff", socket.id);
+    });
+    
+    // Stream
+    socket.on("stream", function(image){
+        socket.broadcast.emit("stream", image);
+    });
+    
+    // IMAGE
+    socket.on('sendImage', function (msg) {
+        //socket.broadcast.to(room).emit('sendImage', socket.nick, msg, "other");
+        io.sockets.in(room).emit('sendImage', socket.nick, msg, socket.id);
     });
 });
 
