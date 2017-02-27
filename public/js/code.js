@@ -70,7 +70,7 @@ function privateUp(){
         
         changeColor($(this));
         
-        $("select").append($("<option></option>").attr("value",idP).text(idP)).val(idP);
+        $("select").append($("<option></option>").attr("value",idP).text("PrivateRoom")).val(idP);
         
         socket.emit("chat message private", "This user want start a private chat with you, click his lock icon to go", idP);
         
