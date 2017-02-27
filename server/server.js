@@ -11,7 +11,6 @@ function normalizePort(val) {
     var port = parseInt(val, 10);
 
     if (isNaN(port)) {
-        // named pipe
         return val;
     }
 
@@ -58,14 +57,18 @@ io.on("connection", function(socket){
     }
     
     socket.on("chat message", function(msg){
-        io.sockets.in(room).emit('chat message', msg, socket.nick, socket.id);
+            io.sockets.in(room).emit('chat message show', msg, socket.nick, socket.id);
     });
     
-    socket.on("change room", function(newRoom){
+    socket.on("chat message private", function(msg, privateId){
+        socket.broadcast.to(privateId).emit('chat message show', msg, socket.nick, socket.id, true);
+    });
+    
+    socket.on("change room", function(newRoom, bool=false){
         socket.leave(room);
         socket.join(newRoom);
         room = newRoom;
-        socket.emit("changeRoom", newRoom);
+        socket.emit("changeRoom", newRoom, bool);
     });
     
     socket.on("disconnect", function(){
@@ -86,6 +89,7 @@ io.on("connection", function(socket){
         io.emit('showUser', text);
     });
     
+    // WRITE...
     socket.on("typeIn", function(){
         io.emit("type", socket.id);
     });
@@ -101,11 +105,10 @@ io.on("connection", function(socket){
     
     // IMAGE
     socket.on('sendImage', function (msg) {
-        //socket.broadcast.to(room).emit('sendImage', socket.nick, msg, "other");
         io.sockets.in(room).emit('sendImage', socket.nick, msg, socket.id);
     });
 });
 
 http.listen(port, function(){
-    console.log("listening on port XXXX...");
+    console.log("listening...");
 });

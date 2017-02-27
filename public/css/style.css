@@ -58,6 +58,11 @@ ul .new{
     background-color: skyblue;
 }
 
+ul .priv{
+    width: 100%;
+    background-color: orangered;
+}
+
 li > p{
     color: darkgrey;
     float: right;
@@ -111,7 +116,7 @@ input{
 }
 
 .msg input{
-    width:80%;
+    width:70%;
     padding-left: 20px;
     font-weight: 900;
 }

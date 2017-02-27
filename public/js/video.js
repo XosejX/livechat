@@ -25,7 +25,7 @@ $(function(){
     
     if(navigator.getUserMedia){
         navigator.getUserMedia({video: true}, loadCam, function(){
-            console.log("Cam error");
+            alert("Your webcam is disabled, you must activate webcam if you want see another users on video");
         });
     }
     

@@ -44,14 +44,37 @@ function selectNick(){
     }
 }
 
+function changeColor(obj){
+    obj.css("color", "rgb(0, 0, 0)");
+    setTimeout(function(){
+        obj.css("color", "rgb(169, 169, 169)");
+    }, 1000);
+}
+
 function videoUp(){
     $(".glyphicon-facetime-video").click(function(){
+        changeColor($(this));
+        
         var display = $("#cam").css("display");
         if (display == "none"){
             $("#cam").css("display", "inline");
         }else{
             $("#cam").css("display", "none");
         }
+    });
+}
+
+function privateUp(){
+    $(".glyphicon-lock").click(function(){
+        idP = $(this).attr("id").substring(1);
+        
+        changeColor($(this));
+        
+        $("select").append($("<option></option>").attr("value",idP).text(idP)).val(idP);
+        
+        socket.emit("chat message private", "This user want start a private chat with you, click his lock icon to go", idP);
+        
+        socket.emit("change room", idP, true);
     });
 }
 
@@ -75,32 +98,35 @@ socket.on("addUserChat", function(users){
     $('#user').empty();
     for (var i=0; i < users.length; i++){
         var video = ('<p><span class="glyphicon glyphicon-facetime-video"></span></p>');
-        var private = ('<p><span class="glyphicon glyphicon-lock"></span></p> ');
+        var private = ('<p><span id="W' + users[i].id + '" class="glyphicon glyphicon-lock"></span></p> ');
         var div = ('<hr/><div>State: ' + users[i].state + '</div>');
         $("#user").append($("<li><img class='ava' src='" + users[i].img + "'/>" + users[i].nick + video + private + div + "<div class='secret' id='" + users[i].id + "'></div></li>"));
     }
-    
     videoUp();
+    privateUp();
 });
 
-socket.on('chat message', function(msg, nick, id){
+socket.on('chat message show', function(msg, nick, id, bool=false){
     msg = escapeHtml(msg);
-    if (msg && socket.id == id){
+    if (bool){
+        $('#line').append($('<li class="priv"><b>' + nick + "</b>: " + msg + '</li>'));
+    }
+    else if (msg && socket.id == id){
         $('#line').append($('<li class="send"><b>' + nick + "</b>: " + msg + '</li>'));
     }
-    if (msg && socket.id != id){
+    else if (msg && socket.id != id){
         $('#line').append($('<li class="other"><b>' + nick + "</b>: " + msg + '</li>'));
     }
     updateScroll();
 });
 
-socket.on("changeRoom", function(room){
-    if ($("#videoS")){
-        $("#videoS").remove();
-    }
-    
+socket.on("changeRoom", function(room, bool=false){
     $("#cam").css("display", "none");
-    $("#line").html("").append($('<li class="new">Welcome to <b>' + room + '</b>!</li>'));
+    if (bool){
+        $("#line").html("").append($('<li class="new">Welcome to private chat, if you want exit, just select another room in the select list</b>!</li>'));
+    }else{
+        $("#line").html("").append($('<li class="new">Welcome to <b>' + room + '</b>!</li>'));
+    }
 });
 
 socket.on("delUser", function(nick){
