@@ -139,7 +139,6 @@ socket.on("showUser", function(nick){
     $('#line').append($('<li class="new">User <b>' + nick + ' </b><font color="green">connected</font></li>'));
 });
 
-
 /* Start event INTERVAL when USER TYPE */
 function interval (){
     /* Create the interval while a user write */

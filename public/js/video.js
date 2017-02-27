@@ -3,7 +3,6 @@ var context = canvas.getContext("2d");
 
 canvas.width = 400;
 canvas.height = 300;
-
 context.width = canvas.width;
 context.height = canvas.height;
 

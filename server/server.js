@@ -28,7 +28,6 @@ app.get("/", function(peticion, respuesta){
     respuesta.sendFile('index.html');    
 });
 
-
 io.on("connection", function(socket){
     var room = "defaultRoom";
     
